@@ -8,6 +8,12 @@ defmodule CalculateTest do
     assert average == 21.80029710232427
   end
 
+  test "should return empty list when passing empty list as data graph" do
+    average = Calculate.get_average_soil_moisture([])
+
+    assert average == []
+  end
+
   test "lowest soil moisture in the day with timestamp" do
     sensor_read_date = Date.from({2015, 9, 18})
     {moisture_rate, timestamp} = GardenData.one_day() |> Calculate.get_lowest_moisture(sensor_read_date)
@@ -32,6 +38,9 @@ defmodule CalculateTest do
   end
 
   test "Hourly light intensity with tempurature" do
-    
+    sensor_read_date = Date.from({2015, 9, 18})
+    light_tempurature = GardenData.one_day() |> Calculate.get_light_tempurature(sensor_read_date)
+
+    assert Enum.count(light_tempurature) == 7
   end
 end

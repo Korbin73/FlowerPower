@@ -10,6 +10,7 @@ defmodule FlowerPower.Calculate do
 	"""
 	use Timex
 
+  def get_average_soil_moisture([]), do: []
   def get_average_soil_moisture(data_graph) do
     list_of_timestamps = get_samples_from data_graph
 
@@ -18,6 +19,27 @@ defmodule FlowerPower.Calculate do
       Enum.map(list_of_timestamps, fn(sample_map) -> Dict.get(sample_map, "vwc_percent")  end)
       |> Enum.sum
     total_soil_moisture / number_of_timestamps
+  end
+
+  def get_light_tempurature(data_graph, sensor_read_date) do
+      get_samples_from(data_graph)
+      |> Enum.group_by(&get_date_from_sample(&1).hour)
+      |> Enum.map(&average_hourly_light_tempurature/1)
+  end
+
+  defp average_hourly_light_tempurature(grouped_hourly_map) do
+    {_, hourly_map} = grouped_hourly_map
+
+    read_date = List.first(hourly_map) |> Dict.get "capture_ts" 
+    hour_block = DateFormat.parse(read_date, "{ISOz}") |> extract_hour
+
+    number_of_reads = Enum.count hourly_map
+    total_tempurature = Enum.map(hourly_map, fn(x) -> Dict.get(x, "air_temperature_celsius") end)
+                            |> Enum.sum
+    total_light = Enum.map(hourly_map, fn(x) -> Dict.get(x, "par_umole_m2s") end)
+                            |> Enum.sum                      
+
+     {hour_block,total_tempurature/number_of_reads, total_light/number_of_reads}
   end
 
   def get_lowest_moisture(data_graph, sensor_read_date) do

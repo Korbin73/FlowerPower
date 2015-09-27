@@ -1,4 +1,4 @@
 Flower Power
 ===========
 
-** TODO: Add description **
+Parrot's flower power api wrapper written in Elixir.

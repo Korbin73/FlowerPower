@@ -21,9 +21,10 @@ defmodule FlowerPower.Calculate do
     total_soil_moisture / number_of_timestamps
   end
 
-  def get_light_tempurature([], sensor_read_date), do: []
+  def get_light_tempurature([], _), do: []
   def get_light_tempurature(data_graph, sensor_read_date) do
       get_samples_from(data_graph)
+      |> Enum.filter(fn sample -> Date.compare(get_date_from_sample(sample), sensor_read_date, :days) == 0 end)
       |> Enum.group_by(&get_date_from_sample(&1).hour)
       |> Enum.map(&average_hourly_light_tempurature/1)
   end
@@ -43,20 +44,24 @@ defmodule FlowerPower.Calculate do
      {hour_block,total_tempurature/number_of_reads, total_light/number_of_reads}
   end
 
+  def get_lowest_moisture([], _), do: []
   def get_lowest_moisture(data_graph, sensor_read_date) do
   	filter_samples(data_graph, sensor_read_date, fn(filtered_sample) -> 
   		Enum.min_by(filtered_sample, fn sample -> Dict.get(sample, "vwc_percent") end)
   	end)
   end
 
+  def get_highest_moisture([], _), do: []
   def get_highest_moisture(data_graph, sensor_read_date) do
   	filter_samples(data_graph, sensor_read_date, fn(filtered_sample) -> 
   		Enum.max_by(filtered_sample,fn sample -> Dict.get(sample, "vwc_percent")  end)
   	end)
   end
 
+  def get_hourly_avgs([], _), do: []
   def get_hourly_avgs(data_graph, sensor_read_date) do
   	get_samples_from(data_graph)
+      |> Enum.filter(fn sample -> Date.compare(get_date_from_sample(sample), sensor_read_date, :days) == 0 end)
 			|> Enum.group_by(&get_date_from_sample(&1).hour)
 			|> Enum.map(&average_hourly_data/1)
   end
@@ -73,7 +78,6 @@ defmodule FlowerPower.Calculate do
   	 {hour_block,total_soil_percentage/number_of_reads}
   end
 
-  defp extract_sample_map({_, sample_map}), do: sample_map
   defp extract_hour({_, time_stamp}), do: time_stamp.hour
   
   def filter_samples(graph, sensor_read_date, criteria) do

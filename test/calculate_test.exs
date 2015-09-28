@@ -51,4 +51,25 @@ defmodule CalculateTest do
 
     assert Enum.count(light_tempurature) == 0
   end
+
+  should "return empty list when passing an empty data graph when getting lowest moisture rate" do
+    sensor_read_date = Date.from({2015, 9, 18})
+    moisture_rate = [] |> Calculate.get_lowest_moisture(sensor_read_date)
+
+    assert Enum.count(moisture_rate) == 0
+  end
+
+  should "return empty list when passing an empty data graph when getting highest moisture rate" do
+    sensor_read_date = Date.from({2015, 9, 18})
+    moisture_rate = [] |> Calculate.get_highest_moisture(sensor_read_date)
+
+    assert Enum.count(moisture_rate) == 0
+  end
+
+  should "return empty list when passing an empty data graph when getting hourly averages" do
+    sensor_read_date = Date.from({2015, 9, 18})
+    moisture_rate = [] |> Calculate.get_hourly_avgs(sensor_read_date)
+
+    assert Enum.count(moisture_rate) == 0
+  end
 end

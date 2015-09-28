@@ -1,4 +1,8 @@
 defmodule FlowerPower.Api do
+  @moduledoc"""
+  This module is used to get the raw data graph from parrots web service
+  """
+
   alias Poison.Parser
   alias FlowerPower.Extractor
   use Timex

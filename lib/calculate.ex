@@ -21,6 +21,7 @@ defmodule FlowerPower.Calculate do
     total_soil_moisture / number_of_timestamps
   end
 
+  def get_light_tempurature([], sensor_read_date), do: []
   def get_light_tempurature(data_graph, sensor_read_date) do
       get_samples_from(data_graph)
       |> Enum.group_by(&get_date_from_sample(&1).hour)

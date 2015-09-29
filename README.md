@@ -47,3 +47,4 @@ Usage
 Items left to do:
 -----------------
 TODO: Add to hex
+TODO: Use Genserver to hold api call state

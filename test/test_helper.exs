@@ -1,2 +1,2 @@
-ExUnit.start(exclude: [integration: true])
+ExUnit.start(exclude: [integration: true], formatters: [ShouldI.CLIFormatter])
 

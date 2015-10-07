@@ -26,8 +26,8 @@ defmodule FlowerPower.Api do
   defp get_garden_by_location(location, access_token, from_date_format, end_date_format ) 
     when is_binary(from_date_format) == false and is_binary(end_date_format) == false
     do
-      from_date = from_date_format |> DateFormat.format("{ISOz}")
-      end_date  = end_date_format  |> DateFormat.format("{ISOz}")
+      {:ok, from_date} = from_date_format |> DateFormat.format("{ISOz}")
+      {:ok, end_date}  = end_date_format  |> DateFormat.format("{ISOz}")
 
       get_garden_by_location(location, access_token, from_date, end_date )
   end

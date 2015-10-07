@@ -33,7 +33,6 @@ defmodule FlowerPower.Api do
   end
 
   defp get_garden_by_location(location, access_token, from_date, end_date) do
-    IO.puts "The one with no guards is getting called #{is_binary(from_date) == false}"
     date_range = %{"from_datetime_utc": from_date, "to_datetime_utc": end_date}
     
     @url_base_path <> "/sensor_data/v2/sample/location/#{location}"

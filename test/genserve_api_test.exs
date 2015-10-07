@@ -38,7 +38,7 @@ defmodule ApiStateManagerTests do
 
   	should "call the api service on first call",context do
   		api_params = {%{}, TestUtils.get_yesterdays_date, TestUtils.get_todays_date}
-  		ApiCache.call_api(context["api"],api_params)
+  		ApiCache.call_api(api_params, context["api"])
   	end
   end
 end

@@ -14,6 +14,7 @@ defmodule FlowerPower.Api do
 
     {:ok, response} = HTTPoison.get url, [], params: credentials
     access_token = get_access_token_from(response)
+
     get_sensor_info( access_token )
       |> get_location_params
       |> get_garden_by_location(access_token, begin_date, end_date)
@@ -22,7 +23,17 @@ defmodule FlowerPower.Api do
 
   defp parse_body({:ok, garden_response}), do: Parser.parse!(garden_response.body)
 
+  defp get_garden_by_location(location, access_token, from_date_format, end_date_format ) 
+    when is_binary(from_date_format) == false and is_binary(end_date_format) == false
+    do
+      from_date = from_date_format |> DateFormat.format("{ISOz}")
+      end_date  = end_date_format  |> DateFormat.format("{ISOz}")
+
+      get_garden_by_location(location, access_token, from_date, end_date )
+  end
+
   defp get_garden_by_location(location, access_token, from_date, end_date) do
+    IO.puts "The one with no guards is getting called #{is_binary(from_date) == false}"
     date_range = %{"from_datetime_utc": from_date, "to_datetime_utc": end_date}
     
     @url_base_path <> "/sensor_data/v2/sample/location/#{location}"

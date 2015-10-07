@@ -14,7 +14,7 @@ defmodule FlowerPower.ApiCache do
 	use Timex
 	alias FlowerPower.StateManager
 
-	def call_api(api_client, api_parameters) do
+	def call_api( api_parameters,api_client) do
 		{credentials, date_from, date_to} = api_parameters
 
 		{:ok, agent}   = StateManager.start
@@ -24,6 +24,7 @@ defmodule FlowerPower.ApiCache do
 			{:ok, results} ->
 				results
 			nil ->
+				IO.puts "calling the service"
 				garden_data = api_client.(credentials, date_from, date_to)
 				StateManager.update_cache {agent, create_timestamp(date_from, date_to), garden_data}
 				garden_data

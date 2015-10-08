@@ -11,25 +11,24 @@ defmodule ApiStateManagerTests do
   		context |> Dict.put "agent", agent
   	end
 
-  	should "return the process id when starting", context do
-  		assert Map.has_key?(context, "agent") == true
+  	should "ok when add a map to the state manager", _context do
+  		assert StateManager.update_cache({"any_keyname", %{"samples" => "test"}}) == :ok    
   	end
 
-  	should "ok when add a map to the state manager", context do
-  		params = {context["agent"], "garden", %{"samples" => "test"}}
-  		assert StateManager.update_cache(params) == :ok    
+  	should "get map from state manager", _context do
+  		StateManager.update_cache({"any_keyname", %{"samples" => "test"}})
+
+  		assert StateManager.get({"any_keyname"}) 
+  		|> pluck_map
+  		|> Map.size == 1
   	end
 
-  	should "get map from state manager", context do
-  		params = {context["agent"], "garden", %{"samples" => "test"}}
-  		StateManager.update_cache(params)
-
-  		assert StateManager.get({context["agent"], "garden"}) |> Map.size == 1
-  	end
+  	defp pluck_map({:ok, retrieved_map}), do: retrieved_map
   end
 
   with "using the api gateway" do
   	setup context do
+  		{:ok, _agent} = FlowerPower.ApiCache.start
   		context |> Dict.put "api", _flower_power_api = fn _, _, _ -> 
   			assert true, "means the service has called to this point"
   			%{"fake" => "data"} 

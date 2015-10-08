@@ -9,6 +9,9 @@ defmodule FlowerPower.Api do
 
   @url_base_path "https://apiflowerpower.parrot.com"
 
+  @doc """
+  Calls the flower power api to get the garden data based on the parameters.
+  """
   def get_garden_data(credentials, begin_date, end_date) do
     url = @url_base_path <> "/user/v1/authenticate"
 

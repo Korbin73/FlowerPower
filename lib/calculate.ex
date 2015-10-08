@@ -10,6 +10,11 @@ defmodule FlowerPower.Calculate do
 	"""
 	use Timex
 
+  @doc """
+  Calculates the daily soil moisture for the given day in the data graph that is retrieve
+  when calling the api service. The returned value will be a single number with unspecified 
+  precision: 21.80029710232427
+  """
   def get_average_soil_moisture([]), do: []
   def get_average_soil_moisture(data_graph) do
     list_of_timestamps = get_samples_from data_graph

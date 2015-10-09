@@ -26,6 +26,11 @@ defmodule FlowerPower.Calculate do
     total_soil_moisture / number_of_timestamps
   end
 
+  @doc """
+  Returns a keyword list with the hour, soil moisture percentage and light intensity.
+  Example:
+    [{6, 23.911042707773333, 0.10000000000000002}, {7, 23.34991703012, 0.1}]
+  """
   def get_light_tempurature([], _), do: []
   def get_light_tempurature(data_graph, sensor_read_date) do
       get_samples_from(data_graph)
@@ -49,6 +54,13 @@ defmodule FlowerPower.Calculate do
      {hour_block,total_tempurature/number_of_reads, total_light/number_of_reads}
   end
 
+  @doc """
+  Gets the lowest moisture measurement of the day based on the day the sensor reading was taken
+  that's in the garden data graph. The sensor takes a reading every 15 minutes.
+
+  It returns a tuple in the following format:
+  {moisture_rate, timestamp}
+  """
   def get_lowest_moisture([], _), do: []
   def get_lowest_moisture(data_graph, sensor_read_date) do
   	filter_samples(data_graph, sensor_read_date, fn(filtered_sample) -> 
@@ -56,6 +68,13 @@ defmodule FlowerPower.Calculate do
   	end)
   end
 
+  @doc """
+  Gets the highest moisture measurement of the day based on the day the sensor reading was taken
+  that's in the garden data graph. The sensor takes a reading every 15 minutes.
+
+  It returns a tuple in the following format:
+  {moisture_rate, timestamp}
+  """
   def get_highest_moisture([], _), do: []
   def get_highest_moisture(data_graph, sensor_read_date) do
   	filter_samples(data_graph, sensor_read_date, fn(filtered_sample) -> 
@@ -63,8 +82,13 @@ defmodule FlowerPower.Calculate do
   	end)
   end
 
-  def get_hourly_avgs([], _), do: []
-  def get_hourly_avgs(data_graph, sensor_read_date) do
+  @doc """
+  Returns a keyword list that has the hour and the soil percentage for that hour in the
+  following format:
+    [{6, 22.639327889313865}, {7, 22.3569090340487}]
+  """
+  def get_hourly_avg_soil_percentage([], _), do: []
+  def get_hourly_avg_soil_percentage(data_graph, sensor_read_date) do
   	get_samples_from(data_graph)
       |> Enum.filter(fn sample -> Date.compare(get_date_from_sample(sample), sensor_read_date, :days) == 0 end)
 			|> Enum.group_by(&get_date_from_sample(&1).hour)
@@ -84,8 +108,8 @@ defmodule FlowerPower.Calculate do
   end
 
   defp extract_hour({_, time_stamp}), do: time_stamp.hour
-  
-  def filter_samples(graph, sensor_read_date, criteria) do
+
+  defp filter_samples(graph, sensor_read_date, criteria) do
   	list_of_timestamps = get_samples_from graph
   	return_tuple =
 	  	list_of_timestamps 

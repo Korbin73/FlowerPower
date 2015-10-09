@@ -6,6 +6,7 @@ defmodule CalculateTest do
 
   should "get average daily soil moisture" do
     average = GardenData.one_day() |> Calculate.get_average_soil_moisture()
+
     assert average == 21.80029710232427
   end
 
@@ -33,8 +34,9 @@ defmodule CalculateTest do
 
   should "get hourly average data by day" do
     sensor_read_date = Date.from({2015, 9, 18})
-    hourly_avg_list = GardenData.one_day() |> Calculate.get_hourly_avgs(sensor_read_date)
-    
+    hourly_avg_list = GardenData.one_day() 
+    |> Calculate.get_hourly_avg_soil_percentage(sensor_read_date)
+
     assert Enum.count(hourly_avg_list) == 7
   end
 
@@ -68,7 +70,8 @@ defmodule CalculateTest do
 
   should "return empty list when passing an empty data graph when getting hourly averages" do
     sensor_read_date = Date.from({2015, 9, 18})
-    moisture_rate = [] |> Calculate.get_hourly_avgs(sensor_read_date)
+    moisture_rate = [] 
+    |> Calculate.get_hourly_avg_soil_percentage(sensor_read_date)
 
     assert Enum.count(moisture_rate) == 0
   end

@@ -1,7 +1,10 @@
 Flower Power
 ===========
 
-Parrot's flower power api wrapper written in Elixir.
+Parrot's flower power cloud service api wrapper written in Elixir.
+
+Before you get started, you will need an oauth token from:
+[parrot api](https://apiflowerpower.parrot.com/api_access/signup)
 
 Usage
 -----------------
@@ -47,4 +50,3 @@ Usage
 Items left to do:
 -----------------
 TODO: Add to hex
-TODO: Use Genserver to hold api call state

@@ -5,6 +5,8 @@ defmodule FlowerPower.Mixfile do
     [app: :flower_power,
      version: "0.0.1",
      elixir: "~> 1.0",
+     description: "Api client for flower power cloud api",
+     package: package,
      deps: deps]
   end
 
@@ -15,15 +17,13 @@ defmodule FlowerPower.Mixfile do
     [applications: [:logger, :httpoison, :tzdata]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type `mix help deps` for more examples and options
+  defp pack do
+    [files: ["lib", "priv", "mix.exs", "README.md"],
+    contributors:["Lee Bryant"],
+    licenses: ["MIT"],
+    links: %{ "GitHub": "https://github.com/Korbin73/FlowerPower" } ]
+  end
+
   defp deps do
     [  
       {:httpoison, "~> 0.7.2"},

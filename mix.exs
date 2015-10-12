@@ -10,18 +10,15 @@ defmodule FlowerPower.Mixfile do
      deps: deps]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
     [applications: [:logger, :httpoison, :tzdata]]
   end
 
-  defp pack do
-    [files: ["lib", "priv", "mix.exs", "README.md"],
-    contributors:["Lee Bryant"],
-    licenses: ["MIT"],
-    links: %{ "GitHub": "https://github.com/Korbin73/FlowerPower" } ]
+  defp package do
+    [ files: ["lib", "priv", "mix.exs", "README.md"],
+      maintainers: ["Lee Bryant"],
+      licenses: ["MIT"],
+      links: %{ "GitHub": "https://github.com/Korbin73/FlowerPower" } ]
   end
 
   defp deps do

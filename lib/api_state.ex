@@ -32,7 +32,6 @@ defmodule FlowerPower.StateManager do
 end
 
 defmodule FlowerPower.ApiCache do
-	import FlowerPower.Api
 	require Logger
 	use Timex
 	alias FlowerPower.StateManager
@@ -76,7 +75,5 @@ defmodule FlowerPower.ApiCache do
 
 		"#{from_days}_#{todays_date}"
 	end
-
-	defp pluck_date({:ok, date}), do: date
 end
 

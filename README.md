@@ -46,7 +46,3 @@ Usage
 	```
 
 2. The calculate module provides transformations using the data graph from the service.
-
-Items left to do:
------------------
-TODO: Add to hex

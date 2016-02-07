@@ -6,7 +6,7 @@ defmodule FlowerPower.Extractor do
   def list_of_timestamps(query_data) do
     list_of_samples =
       query_data
-      |> Dict.get "samples"
+      |> Dict.get("samples")
 
     for n <- list_of_samples, do: Samples.pluck_date(n) |> Samples.convert_to_readable_date
   end

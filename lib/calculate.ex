@@ -42,7 +42,7 @@ defmodule FlowerPower.Calculate do
   defp average_hourly_light_tempurature(grouped_hourly_map) do
     {_, hourly_map} = grouped_hourly_map
 
-    read_date = List.first(hourly_map) |> Dict.get "capture_ts" 
+    read_date = List.first(hourly_map) |> Dict.get("capture_ts")
     hour_block = DateFormat.parse(read_date, "{ISOz}") |> extract_hour
 
     number_of_reads = Enum.count hourly_map
@@ -98,7 +98,7 @@ defmodule FlowerPower.Calculate do
   defp average_hourly_data(grouped_hourly_map) do
   	{_, hourly_map} = grouped_hourly_map
 
-  	read_date = List.first(hourly_map) |> Dict.get "capture_ts" 
+  	read_date = List.first(hourly_map) |> Dict.get("capture_ts") 
   	hour_block = DateFormat.parse(read_date, "{ISOz}") |> extract_hour
 
   	number_of_reads = Enum.count hourly_map
@@ -123,5 +123,5 @@ defmodule FlowerPower.Calculate do
   	{:ok, date} = Dict.get(sample, "capture_ts") |> DateFormat.parse("{ISOz}")
   	date
   end
-  defp get_samples_from(data_graph), do: data_graph |> Dict.get "samples"
+  defp get_samples_from(data_graph), do: data_graph |> Dict.get("samples")
 end

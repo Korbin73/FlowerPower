@@ -23,7 +23,7 @@ defmodule FlowerPower.Mixfile do
 
   defp deps do
     [  
-      {:httpoison, "~> 0.7.2"},
+      {:httpoison, "~> 0.8.1"},
       {:poison, "~> 1.5"},
       {:timex, "~> 0.19.0"},
       {:shouldi, only: :test}

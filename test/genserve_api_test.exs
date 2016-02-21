@@ -5,20 +5,20 @@ defmodule ApiStateManagerTests do
   alias FlowerPower.ApiCache
   alias FlowerPower.StateManager
 
-  with "api state server" do
+  having "api state server" do
   	setup context do
   		{:ok, agent} = StateManager.start
-  		context |> Dict.put "agent", agent
+  		context |> Dict.put("agent", agent)
   	end
 
   	should "ok when add a map to the state manager", _context do
-  		assert StateManager.update_cache({"any_keyname", %{"samples" => "test"}}) == :ok    
+  		assert StateManager.update_cache({"any_keyname", %{"samples" => "test"}}) == :ok
   	end
 
   	should "get map from state manager", _context do
   		StateManager.update_cache({"any_keyname", %{"samples" => "test"}})
 
-  		assert StateManager.get({"any_keyname"}) 
+  		assert StateManager.get({"any_keyname"})
   		|> pluck_map
   		|> Map.size == 1
   	end
@@ -26,13 +26,13 @@ defmodule ApiStateManagerTests do
   	defp pluck_map({:ok, retrieved_map}), do: retrieved_map
   end
 
-  with "using the api gateway" do
+  having "using the api gateway" do
   	setup context do
   		{:ok, _agent} = FlowerPower.ApiCache.start
-  		context |> Dict.put "api", _flower_power_api = fn _, _, _ -> 
+  		context |> Dict.put("api", _flower_power_api = fn _, _, _ ->
   			assert true, "means the service has called to this point"
-  			%{"fake" => "data"} 
-  		end
+  			%{"fake" => "data"}
+  		end)
   	end
 
   	should "call the api service on first call",context do
@@ -47,7 +47,7 @@ defmodule TestUtils do
 
 	def get_yesterdays_date, do: Date.now |> Date.subtract(Time.to_timestamp(2, :days))
 	def get_todays_date,     do: Date.now
-	
+
 	def get_yesterdays_date_format do
 		Date.now
 	  |> Date.subtract(Time.to_timestamp(2, :days))
@@ -60,6 +60,6 @@ defmodule TestUtils do
 	  |> DateFormat.format("{ISO}")
 	  |> pluck_date
 	end
-	
+
 	defp pluck_date({:ok, date}), do: date
 end

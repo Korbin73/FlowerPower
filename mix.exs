@@ -26,7 +26,7 @@ defmodule FlowerPower.Mixfile do
       {:httpoison, "~> 0.7.2"},
       {:poison, "~> 1.5"},
       {:timex, "~> 1.0"},
-      {:shouldi, only: :test}
+      {:shouldi, "~> 0.3.0", only: :test} 
     ]
   end
 end

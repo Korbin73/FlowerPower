@@ -10,7 +10,7 @@
   "mimerl": {:hex, :mimerl, "1.0.2"},
   "pavlov": {:hex, :pavlov, "0.2.3"},
   "poison": {:hex, :poison, "1.5.0"},
-  "shouldi": {:hex, :shouldi, "0.2.3"},
+  "shouldi": {:hex, :shouldi, "0.3.0"},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.6"},
   "timex": {:hex, :timex, "1.0.1"},
   "tzdata": {:hex, :tzdata, "0.5.6"}}

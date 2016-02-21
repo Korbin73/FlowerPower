@@ -3,7 +3,7 @@ defmodule FlowerPower.Mixfile do
 
   def project do
     [app: :flower_power,
-     version: "0.1.2",
+     version: "0.1.3",
      elixir: "~> 1.0",
      description: "Api client for flower power cloud api",
      package: package,
@@ -22,10 +22,10 @@ defmodule FlowerPower.Mixfile do
   end
 
   defp deps do
-    [  
+    [
       {:httpoison, "~> 0.7.2"},
       {:poison, "~> 1.5"},
-      {:timex, "~> 0.19.0"},
+      {:timex, "~> 1.0"},
       {:shouldi, only: :test}
     ]
   end

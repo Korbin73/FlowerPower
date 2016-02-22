@@ -7,11 +7,16 @@ defmodule FlowerPower.Api do
   alias FlowerPower.Extractor
   use Timex
 
+  @type year  :: non_neg_integer
+  @type month :: non_neg_integer
+  @type day   :: non_neg_integer
+
   @url_base_path "https://apiflowerpower.parrot.com"
 
   @doc """
   Calls the flower power api to get the garden data based on the parameters.
   """
+  @spec get_garden_data(%FlowerPower.Credentials{}, {year, month, day}, {year,month,day}) :: %{}
   def get_garden_data(credentials, begin_date, end_date) do
     url = @url_base_path <> "/user/v1/authenticate"
 
@@ -25,21 +30,21 @@ defmodule FlowerPower.Api do
   end
 
   defp parse_body({:ok, garden_response}), do: Parser.parse!(garden_response.body)
-
-  defp get_garden_by_location(location, access_token, from_date_format, end_date_format )
-    when is_binary(from_date_format) == false and is_binary(end_date_format) == false
-    do
-      {:ok, from_date} = from_date_format |> DateFormat.format("{ISOz}")
-      {:ok, end_date}  = end_date_format  |> DateFormat.format("{ISOz}")
-
-      get_garden_by_location(location, access_token, from_date, end_date )
-  end
+  defp pluck_date({:ok, date}), do: date
 
   defp get_garden_by_location(location, access_token, from_date, end_date) do
-    date_range = %{"from_datetime_utc": from_date, "to_datetime_utc": end_date}
-
+    date_range = %{
+      "from_datetime_utc": format_from_erlang_date(from_date) |> pluck_date, 
+      "to_datetime_utc":   format_from_erlang_date(end_date)  |> pluck_date
+    }
+    
     @url_base_path <> "/sensor_data/v2/sample/location/#{location}"
       |> HTTPoison.get([{:Authorization, "Bearer #{access_token}"}], params: date_range)
+  end
+
+  defp format_from_erlang_date(from_date) do
+    Date.from(from_date) 
+    |> DateFormat.format("{YYYY}-{M}-{D} 12:00:00")
   end
 
   defp get_access_token_from(response) do

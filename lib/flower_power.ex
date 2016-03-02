@@ -34,6 +34,18 @@ defmodule FlowerPower.Api do
     |> parse_body
   end
 
+  @spec get_sync_data(%FlowerPower.Credentials{}) :: %{}
+  def get_garden_status(credentials) do
+    get_access_token(credentials)
+    |> get_location_statuses()
+    |> parse_body
+  end
+
+  defp get_location_statuses(access_token) do
+    @url_base_path <> "/sensor_data/v4/garden_locations_status"
+      |> HTTPoison.get([{:Authorization, "Bearer #{access_token}"}])
+  end
+
   defp get_access_token(credentials) do
     url = @url_base_path <> "/user/v1/authenticate"
 

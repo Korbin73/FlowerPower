@@ -18,15 +18,27 @@ defmodule FlowerPower.Api do
   """
   @spec get_garden_data(%FlowerPower.Credentials{}, {year, month, day}, {year,month,day}) :: %{}
   def get_garden_data(credentials, begin_date, end_date) do
+      token = get_access_token(credentials)
+
+      token
+      |> get_sensor_info()
+      |> get_location_params
+      |> get_garden_by_location(token, begin_date, end_date)
+      |> parse_body
+  end
+
+  @spec get_sync_data(%FlowerPower.Credentials{}) :: %{}
+  def get_sync_data(credentials) do
+    get_access_token(credentials)
+    |> get_sensor_info()
+    |> parse_body
+  end
+
+  defp get_access_token(credentials) do
     url = @url_base_path <> "/user/v1/authenticate"
 
     {:ok, response} = HTTPoison.get url, [], params: credentials
-    access_token = get_access_token_from(response)
-
-    get_sensor_info( access_token )
-      |> get_location_params
-      |> get_garden_by_location(access_token, begin_date, end_date)
-      |> parse_body
+    get_access_token_from(response)
   end
 
   defp parse_body({:ok, garden_response}), do: Parser.parse!(garden_response.body)
@@ -34,16 +46,16 @@ defmodule FlowerPower.Api do
 
   defp get_garden_by_location(location, access_token, from_date, end_date) do
     date_range = %{
-      "from_datetime_utc": format_from_erlang_date(from_date) |> pluck_date, 
+      "from_datetime_utc": format_from_erlang_date(from_date) |> pluck_date,
       "to_datetime_utc":   format_from_erlang_date(end_date)  |> pluck_date
     }
-    
+
     @url_base_path <> "/sensor_data/v2/sample/location/#{location}"
       |> HTTPoison.get([{:Authorization, "Bearer #{access_token}"}], params: date_range)
   end
 
   defp format_from_erlang_date(from_date) do
-    Date.from(from_date) 
+    Date.from(from_date)
     |> DateFormat.format("{YYYY}-{M}-{D} 12:00:00")
   end
 

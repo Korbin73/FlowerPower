@@ -7,10 +7,10 @@ defmodule FlowerPower.ApiServer do
 	import FlowerPower.Api
 	require Logger
 	use Timex
-	
+
 
 	def start_link(opt \\ []) do
-		GenServer.start_link(__MODULE__, :ok, opt)		
+		GenServer.start_link(__MODULE__, :ok, opt)
 	end
 
 	@doc """
@@ -40,13 +40,12 @@ defmodule FlowerPower.ApiServer do
 		fetch_success = check_previous_call(api_parameters, connection_dict)
 
 		formatted_from_date = date_from |> DateFormat.format("{ISO}") |> pluck_date
-		formatted_to_date   = date_to   |> DateFormat.format("{ISO}") |> pluck_date
 
 		case fetch_success do
-			{:ok, response} -> 
-				{:reply, response, connection_dict} 
-			:error -> 
-				garden_data = get_garden_data(credentials, formatted_from_date, formatted_to_date)
+			{:ok, response} ->
+				{:reply, response, connection_dict}
+			:error ->
+				garden_data = get_garden_data(credentials, formatted_from_date)
 				new_dict = HashDict.put(connection_dict, create_timestamp(date_from, date_to), garden_data)
 				{:reply, new_dict, connection_dict}
 		end
@@ -65,7 +64,7 @@ defmodule FlowerPower.ApiServer do
 
 	defp check_previous_call({_credentials, date_from, date_to},connection_dict) do
 		# Check time based on the day instead of down to the second.
-		# the key in he dictionary will be the date range 
+		# the key in he dictionary will be the date range
 		timestamp = create_timestamp(date_from, date_to)
 
 		HashDict.fetch(connection_dict, timestamp)

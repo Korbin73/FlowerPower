@@ -1,5 +1,4 @@
 defmodule FlowerPower.Extractor do
-  alias Poison.Parser
   alias FlowerPower.Samples
   use Timex
 

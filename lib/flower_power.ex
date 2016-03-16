@@ -16,14 +16,14 @@ defmodule FlowerPower.Api do
   @doc """
   Calls the flower power api to get the garden data based on the parameters.
   """
-  @spec get_garden_data(%FlowerPower.Credentials{}, {year, month, day}) :: %{}
-  def get_garden_data(credentials, query_date) do
+  @spec get_garden_data(%FlowerPower.Credentials{}, {year, month, day}, {year, month, day}) :: %{}
+  def get_garden_data(credentials, begin_date, end_date) do
       token = get_access_token(credentials)
 
       token
       |> get_sensor_info()
       |> get_location_params
-      |> get_garden_by_location(token, query_date)
+      |> get_garden_by_location(token, begin_date, end_date)
       |> parse_body
   end
 
@@ -56,9 +56,10 @@ defmodule FlowerPower.Api do
   defp parse_body({:ok, garden_response}), do: Parser.parse!(garden_response.body)
   defp pluck_date({:ok, date}), do: date
 
-  defp get_garden_by_location(location, access_token, query_date) do
+  defp get_garden_by_location(location, access_token, begin_date, end_date) do
     day_to_query = %{
-      "from_datetime_utc": format_from_erlang_date(query_date) |> pluck_date
+      "from_datetime_utc": format_from_erlang_date(begin_date) |> pluck_date,
+      "to_datetime_utc": format_from_erlang_date(end_date) |> pluck_date
     }
     
     @url_base_path <> "/sensor_data/v2/sample/location/#{location}"
@@ -77,8 +78,10 @@ defmodule FlowerPower.Api do
   defp get_location_params({:ok, response}) do
       # If we had more that one sensor, the service would have returned more in
       # the array
+
       location_list = Parser.parse!(response.body)
-      List.first(location_list["locations"]) |> Dict.get("location_identifier")
+
+      List.first(location_list["locations"]) |> Dict.get("location_identifier") |> IO.inspect()
   end
 
   defp get_sensor_info(access_token) do

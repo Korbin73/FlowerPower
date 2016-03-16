@@ -45,7 +45,7 @@ defmodule FlowerPower.ApiServer do
 			{:ok, response} ->
 				{:reply, response, connection_dict}
 			:error ->
-				garden_data = get_garden_data(credentials, formatted_from_date)
+				garden_data = get_garden_data(credentials, formatted_from_date, date_to)
 				new_dict = HashDict.put(connection_dict, create_timestamp(date_from, date_to), garden_data)
 				{:reply, new_dict, connection_dict}
 		end
